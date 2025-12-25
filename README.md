@@ -78,7 +78,7 @@ An intelligent cable design validation system that uses **LangGraph multi-agent 
 
 - Python 3.10+
 - Google API Key (for Gemini AI)
-- PostgreSQL (optional, uses SQLite by default)
+- PostgreSQL database
 
 ### 1. Clone the Repository
 
@@ -255,17 +255,32 @@ Content-Type: application/json
     "insulation_material": "PVC",
     "insulation_thickness": 1.0
   },
+  "missing_attributes": [],
   "validation": [
-    {"field": "standard", "status": "PASS", "expected": "IEC 60502-1", "comment": "..."},
-    ...
+    {
+      "field": "standard",
+      "status": "PASS",
+      "expected": "IEC 60502-1",
+      "comment": "Compliant with IEC 60502-1"
+    },
+    {
+      "field": "conductor_material",
+      "status": "PASS",
+      "expected": "Cu or Al",
+      "comment": "Copper conductor per IEC 60228"
+    }
   ],
   "reasoning": "All parameters comply with IEC standards...",
   "confidence": 0.95,
-  "hitl_required": false
+  "hitl_mode": false,
+  "hitl_required": false,
+  "hitl_interactions": []
 }
 ```
 
 ### Validate with HITL Responses
+
+Use this endpoint when `hitl_required` is `true` from initial validation:
 
 ```http
 POST /api/validations/validate-with-responses
@@ -280,15 +295,40 @@ Content-Type: application/json
 }
 ```
 
+**Response:** Same schema as `/validate` with updated attributes and improved confidence.
+
 ### Design CRUD
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/designs/` | List all designs |
-| GET | `/api/designs/{id}` | Get design by ID |
+| GET | `/api/designs/{design_id}` | Get design by ID |
 | POST | `/api/designs/` | Create new design |
-| PUT | `/api/designs/{id}` | Update design |
-| DELETE | `/api/designs/{id}` | Delete design |
+| PUT | `/api/designs/{design_id}` | Update design |
+| DELETE | `/api/designs/{design_id}` | Delete design |
+
+### Utility Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Root - API info and status |
+| GET | `/health` | Health check endpoint |
+
+### Response Schema Reference
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `user_input` | string | Original user input |
+| `route` | string | Routing decision: `FETCH_DESIGN`, `EXTRACT_FROM_TEXT`, `IGNORE` |
+| `design_id` | string \| null | Design ID if fetched from database |
+| `attributes` | object | Extracted/fetched cable design attributes |
+| `missing_attributes` | string[] | List of missing attributes for HITL |
+| `validation` | array | Validation results for each field |
+| `reasoning` | string | AI reasoning for validation decisions |
+| `confidence` | float | Overall confidence score (0.0-1.0) |
+| `hitl_mode` | boolean | Whether HITL mode was enabled |
+| `hitl_required` | boolean | Whether HITL interaction is needed |
+| `hitl_interactions` | array | HITL interaction history |
 
 ---
 
