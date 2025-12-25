@@ -116,8 +116,8 @@ LLM_PROVIDER=google
 LLM_MODEL=gemini-2.0-flash
 LLM_TEMPERATURE=0.0
 
-# Database (optional - defaults to SQLite)
-DATABASE_URL=sqlite:///./cable_validation.db
+# Database (PostgreSQL)
+DATABASE_URL=postgresql://username:password@localhost:5432/cable_validation
 
 # API Configuration
 API_HOST=0.0.0.0
