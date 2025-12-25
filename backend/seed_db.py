@@ -27,14 +27,14 @@ def seed_designs():
             db.add(design)
         
         db.commit()
-        print(f"✅ Seeded {len(DESIGN_DATABASE)} designs from notebook")
+        print(f" Seeded {len(DESIGN_DATABASE)} designs from notebook")
         
         # Display seeded designs
         for design_id in DESIGN_DATABASE.keys():
             print(f"   - {design_id}")
     
     except Exception as e:
-        print(f"❌ Error seeding database: {e}")
+        print(f" Error seeding database: {e}")
         db.rollback()
     
     finally:

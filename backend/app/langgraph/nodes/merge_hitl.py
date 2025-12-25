@@ -19,7 +19,7 @@ def merge_hitl_responses(state: CableValidationState) -> CableValidationState:
         return state
     
     print("\n" + "="*80)
-    print("🔄 MERGING HITL RESPONSES INTO ATTRIBUTES")
+    print(" MERGING HITL RESPONSES INTO ATTRIBUTES")
     print("="*80)
     
     attributes = state.get("attributes", {})
@@ -43,7 +43,7 @@ def merge_hitl_responses(state: CableValidationState) -> CableValidationState:
     state["attributes"] = attributes
     state["conversation_history"] = conversation_history
     
-    print(f"\n✅ Merged {len(hitl_responses)} HITL responses")
+    print(f"\n Merged {len(hitl_responses)} HITL responses")
     print("="*80)
     
     return state

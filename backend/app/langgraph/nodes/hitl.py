@@ -20,13 +20,13 @@ def hitl_prompt_node(state: CableValidationState) -> CableValidationState:
     hitl_responses = state.get("hitl_responses", {})
 
     print("\n" + "="*80)
-    print("🤝 HUMAN-IN-THE-LOOP INTERACTION")
+    print("HUMAN-IN-THE-LOOP INTERACTION")
     print("="*80)
-    print(f"\n📊 STATE DEBUG:")
+    print(f"\n STATE DEBUG:")
     print(f"   Missing attributes: {missing}")
     print(f"   HITL responses: {hitl_responses}")
     print(f"   Has pre-loaded responses: {bool(hitl_responses)}")
-    print("\n⚠️  The following fields have WARN status due to missing data:")
+    print("\n The following fields have WARN status due to missing data:")
 
     # Show which fields need input
     for field in missing:
@@ -49,7 +49,7 @@ def hitl_prompt_node(state: CableValidationState) -> CableValidationState:
         # No pre-loaded responses - this is the initial validation
         # Set flag to skip HITL collection and exit workflow
         # IMPORTANT: Keep missing_attributes so API can return them to frontend
-        print("⚠️  No pre-loaded responses. Returning to frontend for user input collection.")
+        print(" No pre-loaded responses. Returning to frontend for user input collection.")
         state["skip_hitl_collection"] = True
         return state
 
@@ -61,13 +61,13 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
     """
     missing = state.get("missing_attributes", [])
 
-    print(f"\n🔍 ASK_MISSING_ATTRIBUTE DEBUG:")
+    print(f"\nASK_MISSING_ATTRIBUTE DEBUG:")
     print(f"   Missing: {missing}")
     print(f"   Has hitl_responses: {bool(state.get('hitl_responses', {}))}")
     print(f"   Responses processed: {state.get('hitl_responses_processed', False)}")
 
     if not missing:
-        print("   ⚠️  No missing attributes, returning state")
+        print("No missing attributes, returning state")
         return state
 
     # Initialize retry tracking if not present
@@ -82,7 +82,7 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
     # If we have pre-loaded responses, process ALL of them at once
     if hitl_responses and not state.get("hitl_responses_processed", False):
         print("\n" + "="*80)
-        print("🔄 PROCESSING PRE-LOADED HITL RESPONSES")
+        print("PROCESSING PRE-LOADED HITL RESPONSES")
         print("="*80)
         
         attributes = state.get("attributes", {})
@@ -115,7 +115,7 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
         state["missing_attributes"] = missing
         state["hitl_responses_processed"] = True  # Mark as processed
         
-        print(f"\n✅ Processed {len(hitl_responses)} HITL responses")
+        print(f"\n Processed {len(hitl_responses)} HITL responses")
         print(f"   Updated attributes: {attributes}")
         print(f"   Remaining missing attributes: {len(missing)}")
         print("="*80)
@@ -141,7 +141,7 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
         "insulation_thickness": "insulation thickness in mm (e.g., 1.0)"
     }
 
-    print(f"\n❓ Please provide the {attr_display.get(attr, attr)}:")
+    print(f"\n Please provide the {attr_display.get(attr, attr)}:")
     
     # For web-based HITL without pre-loaded responses, user_response is provided via API
     if user_response is None:
@@ -150,13 +150,13 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
         
         # Check if max retries reached
         if retry_count + 1 >= max_retries:
-            print(f"   ⚠️  No user response after {max_retries} attempts. Skipping attribute.")
+            print(f"No user response after {max_retries} attempts. Skipping attribute.")
             # Remove from missing list to prevent infinite loop
             if attr in missing:
                 missing.remove(attr)
             state["missing_attributes"] = missing
         else:
-            print(f"   ⚠️  No user response provided (web-based HITL) - Attempt {retry_count + 1}/{max_retries}")
+            print(f"No user response provided (web-based HITL) - Attempt {retry_count + 1}/{max_retries}")
         
         return state
     
@@ -189,7 +189,7 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
         
         # If max retries reached, remove from list
         if retry_count + 1 >= max_retries:
-            print(f"   ⚠️  Max retries reached for {attr}. Skipping.")
+            print(f"Max retries reached for {attr}. Skipping.")
             if attr in missing:
                 missing.remove(attr)
             state["missing_attributes"] = missing

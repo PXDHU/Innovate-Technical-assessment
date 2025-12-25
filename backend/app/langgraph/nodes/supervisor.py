@@ -52,6 +52,6 @@ Respond ONLY with JSON (no markdown):
         else:
             route = "IGNORE"
 
-    print(f"\n🎯 SUPERVISOR DECISION: {route}")
+    print(f"\n SUPERVISOR DECISION: {route}")
     state["route"] = route
     return state

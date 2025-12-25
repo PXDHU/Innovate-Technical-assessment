@@ -21,7 +21,6 @@ class CableValidationState(TypedDict, total=False):
     hitl_mode: bool
     hitl_retry_count: Dict[str, int]  # Track retry attempts per attribute
     hitl_max_retries: int  # Maximum retries before giving up
-    # HITL workflow fields - required for state preservation through LangGraph
     hitl_responses: Dict[str, str]  # Pre-loaded HITL responses from API
     skip_hitl_collection: bool  # Flag to skip HITL collection (web-based)
     hitl_responses_processed: bool  # Flag to mark HITL responses as processed

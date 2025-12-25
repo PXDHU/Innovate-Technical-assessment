@@ -104,7 +104,7 @@ class ValidationService:
         )
         
         print("\n" + "="*80)
-        print("✅ VALIDATION COMPLETE")
+        print("VALIDATION COMPLETE")
         print("="*80)
         print(f"Final attributes: {final_state.get('attributes', {})}")
         print(f"Final missing: {final_state.get('missing_attributes', [])}")

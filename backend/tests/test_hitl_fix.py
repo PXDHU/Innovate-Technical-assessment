@@ -18,7 +18,7 @@ def test_hitl_workflow():
     service = ValidationService(db)
     
     # Step 1: Initial validation (should show WARN for missing fields)
-    print("\n📋 STEP 1: Initial Validation")
+    print("\n STEP 1: Initial Validation")
     print("-"*80)
     initial_result = service.run_validation('Validate DESIGN-002', hitl_mode=True)
     
@@ -30,7 +30,7 @@ def test_hitl_workflow():
         print(f"  {status_symbol} {v['field']}: {v['status']}")
     
     # Step 2: Re-validation with HITL responses
-    print("\n\n📋 STEP 2: Re-validation with HITL Responses")
+    print("\n\n STEP 2: Re-validation with HITL Responses")
     print("-"*80)
     print("Providing HITL responses:")
     print("  - conductor_class: Class 2")
@@ -76,16 +76,16 @@ def test_hitl_workflow():
     # Check if conductor_class and insulation_thickness are no longer WARN
     success = True
     if 'conductor_class' in final_warns:
-        print("\n❌ FAILED: conductor_class still has WARN status after HITL")
+        print("\n FAILED: conductor_class still has WARN status after HITL")
         success = False
     else:
         print("\n✅ SUCCESS: conductor_class no longer has WARN status")
     
     if 'insulation_thickness' in final_warns:
-        print("❌ FAILED: insulation_thickness still has WARN status after HITL")
+        print(" FAILED: insulation_thickness still has WARN status after HITL")
         success = False
     else:
-        print("✅ SUCCESS: insulation_thickness no longer has WARN status")
+        print(" SUCCESS: insulation_thickness no longer has WARN status")
     
     db.close()
     

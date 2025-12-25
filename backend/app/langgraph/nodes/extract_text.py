@@ -47,14 +47,14 @@ Extract now (JSON only):"""
         end = content.rfind('}') + 1
         if start != -1 and end > start:
             attributes = json.loads(content[start:end])
-            print(f"\n🔍 EXTRACTED ATTRIBUTES:")
+            print(f"\nEXTRACTED ATTRIBUTES:")
             for key, value in attributes.items():
                 print(f"   {'✓' if value else '✗'} {key}: {value}")
             state["attributes"] = attributes
         else:
             raise ValueError("No JSON found")
     except Exception as e:
-        print(f"\n❌ EXTRACTION FAILED: {e}")
+        print(f"\n EXTRACTION FAILED: {e}")
         state["attributes"] = {}
 
     return state

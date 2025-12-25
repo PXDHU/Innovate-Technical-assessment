@@ -17,7 +17,7 @@ def validation_agent(state: CableValidationState) -> CableValidationState:
     is_initial = not state.get("initial_validation_done", False)
     
     # Debug logging to verify state
-    print(f"\n🔍 VALIDATION AGENT DEBUG:")
+    print(f"\n VALIDATION AGENT DEBUG:")
     print(f"   Attributes received: {list(attributes.keys())}")
     print(f"   Attribute values: {attributes}")
     print(f"   Missing attributes: {missing}")
@@ -224,7 +224,7 @@ Return ONLY valid JSON (no markdown, no preamble):"""
             if warn_count > 0 or fail_count > 0 or missing:
                 max_confidence = 1.0 - (warn_count * 0.10) - (len(missing) * 0.15) - (fail_count * 0.05)
                 if confidence > max_confidence:
-                    print(f"\n⚙️  Recalibrating confidence: {confidence:.2f} → {max_confidence:.2f}")
+                    print(f"\nRecalibrating confidence: {confidence:.2f} → {max_confidence:.2f}")
                     confidence = max(0.3, max_confidence)
 
             state["validation"] = validation
@@ -232,14 +232,14 @@ Return ONLY valid JSON (no markdown, no preamble):"""
             state["confidence"] = confidence
             state["initial_validation_done"] = True  # Mark initial validation as done
 
-            print(f"\n🔬 VALIDATION COMPLETE")
+            print(f"\n VALIDATION COMPLETE")
             print(f"   Confidence: {confidence:.2f}")
             print(f"   WARN count: {warn_count}, FAIL count: {fail_count}, Missing: {len(missing)}")
         else:
             raise ValueError("No valid JSON found")
 
     except Exception as e:
-        print(f"\n❌ VALIDATION FAILED: {e}")
+        print(f"\n VALIDATION FAILED: {e}")
         state["validation"] = []
         state["reasoning"] = "Validation could not be completed"
         state["confidence"] = 0.0

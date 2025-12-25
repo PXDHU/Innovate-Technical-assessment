@@ -40,22 +40,22 @@ Return JSON: {{"design_id": "DESIGN-XXX"}} or {{"design_id": null}}"""
             design = db.query(Design).filter(Design.id == design_id).first()
             if design:
                 attributes = design.to_dict()
-                print(f"\n📦 FETCHED DESIGN: {design_id}")
+                print(f"\n FETCHED DESIGN: {design_id}")
                 state["design_id"] = design_id
                 state["attributes"] = attributes
             else:
-                print(f"\n❌ DESIGN NOT FOUND: {design_id}")
+                print(f"\n DESIGN NOT FOUND: {design_id}")
                 state["attributes"] = {}
         else:
             # Fallback to mock database (for testing without DB)
             from app.utils.constants import DESIGN_DATABASE
             if design_id in DESIGN_DATABASE:
                 attributes = DESIGN_DATABASE[design_id].copy()
-                print(f"\n📦 FETCHED DESIGN: {design_id}")
+                print(f"\n FETCHED DESIGN: {design_id}")
                 state["design_id"] = design_id
                 state["attributes"] = attributes
             else:
-                print(f"\n❌ DESIGN NOT FOUND: {design_id}")
+                print(f"\n DESIGN NOT FOUND: {design_id}")
                 state["attributes"] = {}
         
         # Merge HITL responses into attributes if provided
@@ -74,9 +74,9 @@ Return JSON: {{"design_id": "DESIGN-XXX"}} or {{"design_id": null}}"""
                     print(f"   ✗ Could not parse {attr}")
             
             state["attributes"] = attributes
-            print(f"✅ Merged {len(hitl_responses)} HITL responses into design")
+            print(f" Merged {len(hitl_responses)} HITL responses into design")
     else:
-        print(f"\n❌ DESIGN NOT FOUND: {design_id}")
+        print(f"\n DESIGN NOT FOUND: {design_id}")
         state["attributes"] = {}
 
     return state

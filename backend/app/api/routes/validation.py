@@ -99,7 +99,7 @@ async def validate_design(
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()
-        print(f"\n❌ VALIDATION ENDPOINT ERROR:\n{error_details}")
+        print(f"\n VALIDATION ENDPOINT ERROR:\n{error_details}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -124,7 +124,7 @@ async def validate_with_hitl_responses(
     try:
         # Debug logging
         print("\n" + "="*80)
-        print("📥 VALIDATE-WITH-RESPONSES ENDPOINT")
+        print("VALIDATE-WITH-RESPONSES ENDPOINT")
         print("="*80)
         print(f"User input: {request.user_input}")
         print(f"Responses received: {request.responses}")
@@ -177,5 +177,5 @@ async def validate_with_hitl_responses(
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()
-        print(f"\n❌ HITL SUBMISSION ERROR:\n{error_details}")
+        print(f"\n HITL SUBMISSION ERROR:\n{error_details}")
         raise HTTPException(status_code=500, detail=str(e))
