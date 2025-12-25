@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Driven Cable Design Validation System - IEC Standards Compliance">
+    <title>Cable Design Validator - AI-Powered IEC Standards Compliance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="design-validator.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">⚡</span>
+                    Cable Design Validator
+                </h1>
+                <p class="tagline">AI-Powered IEC Standards Compliance Validation</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="layout">
+                <!-- Left Column: Input Form -->
+                <div class="left-column">
+                    <!-- Input Section -->
+                    <section class="card input-section">
+                        <h2 class="section-title">
+                            <span class="icon">📝</span>
+                            Design Query
+                        </h2>
+
+                        <!-- Free Text Form -->
+                        <form id="validation-form" class="validation-form">
+                            <div class="form-group">
+                                <label for="user-input" class="form-label">Enter Design ID or Description</label>
+                                <textarea id="user-input" class="form-input" rows="6"
+                                    placeholder="e.g., IEC 60502-1, 0.6/1 kV, Cu Class 2, 10 mm², PVC insulation 1.0 mm&#10;or&#10;DESIGN-001&#10;or&#10;10 sqmm copper cable with PVC insulation"></textarea>
+                                <div class="input-hints">
+                                    <span class="hint">💡 Try: DESIGN-001</span>
+                                    <span class="hint">💡 Try: DESIGN-002</span>
+                                    <span class="hint">💡 Try: 10 sqmm copper cable</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="hitl-mode" class="toggle-input">
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Enable HITL Mode</span>
+                                </label>
+                                <p class="form-hint">Interactively collect missing attributes via chat</p>
+                            </div>
+
+                            <button type="submit" id="validate-btn" class="btn btn-primary">
+                                <span class="btn-text">Validate Design</span>
+                                <span class="btn-loader"></span>
+                            </button>
+                        </form>
+                    </section>
+                </div>
+
+                <!-- Right Column: Results -->
+                <div class="right-column">
+                    <!-- Results Display -->
+                    <section class="card results-section" id="results-section" style="display: none;">
+                        <h2 class="section-title">
+                            <span class="icon">📊</span>
+                            Validation Results
+                        </h2>
+
+                        <!-- Results Header -->
+                        <div id="results-header" class="results-header">
+                            <div class="result-meta">
+                                <span class="meta-label">Design ID:</span>
+                                <span id="result-design-id" class="meta-value">-</span>
+                            </div>
+                            <div class="result-meta">
+                                <span class="meta-label">Confidence:</span>
+                                <div class="confidence-meter">
+                                    <div id="confidence-bar" class="confidence-bar" style="width: 0%"></div>
+                                    <span id="confidence-value" class="confidence-value">0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Table -->
+                        <div id="results-table-container" class="results-table-container">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Attribute</th>
+                                        <th>Provided</th>
+                                        <th>Expected</th>
+                                        <th>Status</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-tbody">
+                                    <!-- Results will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- AI Reasoning Drawer Toggle -->
+                        <button id="reasoning-toggle" class="reasoning-toggle">
+                            <span class="icon">💭</span>
+                            View AI Reasoning & Confidence
+                        </button>
+                    </section>
+
+                    <!-- Placeholder when no results -->
+                    <section class="card placeholder-section" id="placeholder-section">
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <h3>No Validation Results Yet</h3>
+                            <p>Enter cable design specifications and click "Validate Design" to see results</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Reasoning Side Drawer -->
+    <div id="reasoning-drawer" class="reasoning-drawer">
+        <div class="drawer-overlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>AI Reasoning & Confidence</h3>
+                <button class="drawer-close">&times;</button>
+            </div>
+            <div class="drawer-body">
+                <div class="confidence-section">
+                    <h4>Overall Confidence</h4>
+                    <div class="confidence-display">
+                        <div class="confidence-circle">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="confidence-bg" cx="50" cy="50" r="45"></circle>
+                                <circle id="confidence-circle" class="confidence-fg" cx="50" cy="50" r="45"></circle>
+                            </svg>
+                            <span id="confidence-percent" class="confidence-percent">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasoning-section">
+                    <h4>Detailed Reasoning</h4>
+                    <p id="reasoning-text" class="reasoning-text"></p>
+                </div>
+                <div id="hitl-log-section" class="hitl-log-section" style="display: none;">
+                    <h4>HITL Interaction Log</h4>
+                    <div id="hitl-log" class="hitl-log"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HITL Chat Modal -->
+    <div id="hitl-chat-modal" class="hitl-chat-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🤝 Human-in-the-Loop Interaction</h3>
+                <p class="modal-subtitle">The system needs additional information to complete validation</p>
+            </div>
+            <div class="modal-body">
+                <div id="hitl-chat-messages" class="hitl-chat-messages">
+                    <!-- Chat messages will be inserted here -->
+                </div>
+                <div id="hitl-chat-input-container" class="hitl-chat-input-container">
+                    <form id="hitl-chat-form" class="hitl-chat-form">
+                        <input type="text" id="hitl-chat-input" class="hitl-chat-input"
+                            placeholder="Type your answer..." autocomplete="off" required />
+                        <button type="submit" class="hitl-chat-send-btn" id="hitl-chat-send-btn">
+                            <span class="send-icon">➤</span>
+                        </button>
+                    </form>
+                </div>
+                <div id="hitl-chat-complete" class="hitl-chat-complete" style="display: none;">
+                    <button type="button" class="btn btn-primary" id="submit-all-hitl-btn">
+                        <span class="btn-text">Submit All Responses & Re-Validate</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="design-validator.js"></script>
+</body>
+
+</html>
