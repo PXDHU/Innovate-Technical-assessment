@@ -11,7 +11,6 @@ from app.langgraph.nodes.validation import validation_agent
 from app.langgraph.nodes.hitl import hitl_prompt_node, ask_missing_attribute
 from app.langgraph.routing import (
     route_after_supervisor,
-    route_after_check,
     route_after_validation,
     route_after_hitl_prompt,
     route_after_ask
@@ -57,8 +56,6 @@ def create_validation_graph():
     workflow.add_conditional_edges("ask_missing", route_after_ask,
         {"ask_missing": "ask_missing", "revalidate": "revalidate"})
 
-
-    
     # After revalidation, end
     workflow.add_edge("revalidate", END)
 

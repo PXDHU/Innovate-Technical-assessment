@@ -181,7 +181,37 @@ function displayValidationResults(data) {
     const tbody = document.getElementById('results-tbody');
     tbody.innerHTML = '';
 
-    if (data.validation && data.validation.length > 0) {
+    // Handle IGNORE route - show user-friendly guidance message
+    if (data.route === 'IGNORE') {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td colspan="5" style="text-align: center; padding: 2rem;">
+                <div style="color: var(--color-text-muted);">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">💡</div>
+                    <h3 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Input Not Recognized</h3>
+                    <p style="margin-bottom: 1.5rem;">Your input doesn't appear to be related to cable design validation.</p>
+                    <div style="text-align: left; max-width: 400px; margin: 0 auto; background: var(--color-bg-tertiary); padding: 1rem; border-radius: 8px;">
+                        <p style="font-weight: 600; margin-bottom: 0.75rem;">Please try one of these:</p>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
+                                📦 <strong>Design ID:</strong> DESIGN-001, DESIGN-002
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
+                                📋 <strong>Full specs:</strong> IEC 60502-1, 10mm² Cu, PVC 1.0mm, 0.6/1kV
+                            </li>
+                            <li style="padding: 0.5rem 0;">
+                                ⚡ <strong>Partial specs:</strong> 10 sqmm copper cable with PVC insulation
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+
+        // Show a toast as well
+        showToast('Please enter cable design specifications', 'warning');
+    } else if (data.validation && data.validation.length > 0) {
         data.validation.forEach(item => {
             const row = document.createElement('tr');
 

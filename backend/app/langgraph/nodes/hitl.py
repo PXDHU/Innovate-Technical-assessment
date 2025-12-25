@@ -121,8 +121,6 @@ def ask_missing_attribute(state: CableValidationState, user_response: str = None
         print("="*80)
         
         return state
-        
-        return state
 
     # Original logic for interactive HITL (notebook style)
     # If attr not provided, take the first missing attribute

@@ -38,10 +38,27 @@ async def validate_design(
             hitl_mode=request.hitl_mode
         )
         
-        # Convert to response schema
+        # Handle IGNORE route - return user-friendly message
+        if result.get("route") == "IGNORE":
+            return ValidationResponse(
+                user_input=result["user_input"],
+                route="IGNORE",
+                design_id=None,
+                attributes={},
+                missing_attributes=[],
+                validation=[],
+                reasoning="Your input doesn't appear to be related to cable design validation. Please provide either:\n\n• A **Design ID** (e.g., DESIGN-001, DESIGN-002)\n• **Cable specifications** (e.g., 'IEC 60502-1, 10mm² Cu, PVC insulation 1.0mm')\n• **Partial specifications** (e.g., '10 sqmm copper cable with PVC insulation')",
+                confidence=0.0,
+                hitl_mode=result.get("hitl_mode", False),
+                hitl_required=False,
+                hitl_interactions=[]
+            )
+        
+        # Convert to response schema (handle None validation)
+        validation_data = result.get("validation") or []
         validation_results = [
             ValidationResultItem(**item)
-            for item in result.get("validation", [])
+            for item in validation_data
         ]
         
         hitl_interactions = []

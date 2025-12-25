@@ -11,12 +11,6 @@ def route_after_supervisor(state: CableValidationState) -> str:
     return {"IGNORE": "end", "FETCH_DESIGN": "fetch_design", "EXTRACT_FROM_TEXT": "extract_from_text"}.get(route, "end")
 
 
-def route_after_check(state: CableValidationState) -> str:
-    """Route after checking missing attributes"""
-    # Always validate first to get WARN status
-    return "validate"
-
-
 def route_after_validation(state: CableValidationState) -> str:
     """Route after validation - decide if HITL needed"""
     missing = state.get("missing_attributes", [])
